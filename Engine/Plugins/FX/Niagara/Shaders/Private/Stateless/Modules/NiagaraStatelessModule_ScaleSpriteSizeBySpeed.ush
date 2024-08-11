@@ -1,0 +1,18 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
+
+#include "../NiagaraStatelessCommon.ush"
+
+uint2	ScaleSpriteSizeBySpeed_ScaleDistribution;
+float	ScaleSpriteSizeBySpeed_VelocityNorm;
+
+void ScaleSpriteSizeBySpeed_Simulate(inout FStatelessParticle Particle)
+{
+	if (ScaleSpriteSizeBySpeed_ScaleDistribution.y > 0)
+	{
+		const float Speed = length2(Particle.Position - Particle.PreviousPosition) * Particle.InvDeltaTime;
+		const float NormSpeed = saturate(Speed * ScaleSpriteSizeBySpeed_VelocityNorm);
+
+		Particle.SpriteSize			*= LerpStaticFloat2(ScaleSpriteSizeBySpeed_ScaleDistribution, NormSpeed);
+		Particle.PreviousSpriteSize	*= LerpStaticFloat2(ScaleSpriteSizeBySpeed_ScaleDistribution, NormSpeed);
+	}
+}

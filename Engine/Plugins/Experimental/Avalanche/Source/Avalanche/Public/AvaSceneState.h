@@ -1,0 +1,34 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
+
+#pragma once
+
+#include "AvaTag.h"
+#include "Containers/Array.h"
+#include "Containers/Set.h"
+#include "UObject/Object.h"
+#include "AvaSceneState.generated.h"
+
+class UAvaAttribute;
+class UAvaSceneSettings;
+struct FAvaTagHandle;
+
+/** Object providing State information of the Scene */
+UCLASS(MinimalAPI)
+class UAvaSceneState : public UObject
+{
+	GENERATED_BODY()
+
+public:
+	void Initialize(UAvaSceneSettings* InSceneSettings);
+
+	AVALANCHE_API bool AddTagAttribute(const FAvaTagHandle& InTagHandle);
+
+	AVALANCHE_API bool RemoveTagAttribute(const FAvaTagHandle& InTagHandle);
+
+	AVALANCHE_API bool ContainsTagAttribute(const FAvaTagHandle& InTagHandle) const;
+
+private:
+	/** In-play Scene Attributes. Starts as being the Scene Setting Attributes but can added to / removed from while in-play */
+	UPROPERTY(Transient)
+	TArray<TObjectPtr<UAvaAttribute>> SceneAttributes;
+};
